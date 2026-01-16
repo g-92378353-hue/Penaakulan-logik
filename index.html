@@ -3,180 +3,396 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Logik Matematik KV</title>
-
-  <!-- ===== STYLE.CSS (EMBEDDED) ===== -->
+  <title>Misi Penaakulan Logik: SVM SEM 4</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#2563eb">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+    
     body {
-      font-family: Arial, sans-serif;
-      background: #f9fafb;
-      margin: 0;
-      padding: 0;
-    }
-
-    #app {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    h1, h2 {
-      color: #1f2933;
-    }
-
-    p {
-      font-size: 16px;
-      line-height: 1.5;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f8fafc;
     }
 
     .screen {
       display: none;
+      animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .screen.active {
       display: block;
     }
 
-    button {
-      display: block;
-      width: 100%;
-      margin: 10px 0;
-      padding: 12px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background: #2563eb;
-      color: white;
-      cursor: pointer;
+    @keyframes slideIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
 
-    button.secondary {
-      background: #6b7280;
+    .card {
+      background: rgba(30, 41, 59, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     }
 
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      font-size: 15px;
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      transition: all 0.2s;
     }
 
-    ul {
-      padding-left: 20px;
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);
     }
 
-    .note {
-      background: #e0f2fe;
-      padding: 12px;
-      border-left: 4px solid #0284c7;
-      margin: 10px 0;
+    /* Feedback Overlay */
+    #feedbackOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
   </style>
 </head>
+<body class="min-h-screen flex items-center justify-center p-4">
 
-<body>
+  <!-- Feedback Popup -->
+  <div id="feedbackOverlay">
+    <div id="feedbackCard" class="card p-6 max-w-sm w-full text-center border-2 border-white/20">
+      <div id="feedbackIcon" class="text-6xl mb-4"></div>
+      <h3 id="feedbackTitle" class="text-2xl font-black mb-2 uppercase"></h3>
+      <p id="feedbackText" class="text-sm text-gray-300 mb-6"></p>
+      <div id="correctAnswerBox" class="hidden mb-4 p-4 bg-blue-900/40 border border-blue-500/30 rounded-xl text-xs italic text-blue-200"></div>
+      <p class="text-[10px] text-gray-500 animate-pulse tracking-widest uppercase">Sinkronisasi fasa seterusnya...</p>
+    </div>
+  </div>
 
-<div id="app">
-
-  <!-- SKRIN 1 : S (SITUASI) -->
-  <section class="screen active" id="screen1">
-    <h1>Situasi Bengkel</h1>
-    <p><strong>Jika mesin tidak diservis, maka mesin mudah rosak.</strong></p>
-    <p>Adakah ayat ini sentiasa benar?</p>
-
-    <button onclick="nextScreen()">Ya</button>
-    <button onclick="nextScreen()">Tidak</button>
-    <button onclick="nextScreen()">Tak pasti</button>
-  </section>
-
-  <!-- SKRIN 2 : KONFLIK PEMIKIRAN -->
-  <section class="screen" id="screen2">
-    <h2>Cuba Fikir</h2>
-    <p><strong>Jika mesin mudah rosak, maka mesin tidak diservis.</strong></p>
-    <p>Adakah maksudnya sama dengan ayat asal?</p>
-
-    <button onclick="nextScreen()">Sama</button>
-    <button onclick="nextScreen()">Tidak sama</button>
-  </section>
-
-  <!-- SKRIN 3 : E (BINA AYAT) -->
-  <section class="screen" id="screen3">
-    <h2>Bina Ayat Logik</h2>
-    <p>Daripada ayat asal, bina ayat berikut:</p>
-
-    <label>Akas</label>
-    <input type="text" placeholder="Jika ..., maka ...">
-
-    <label>Songsangan</label>
-    <input type="text" placeholder="Jika bukan ..., maka bukan ...">
-
-    <label>Kontrapositif</label>
-    <input type="text" placeholder="Jika bukan ..., maka bukan ...">
-
-    <button onclick="nextScreen()">Semak</button>
-  </section>
-
-  <!-- SKRIN 4 : N (SEMAKAN) -->
-  <section class="screen" id="screen4">
-    <h2>Semakan Kefahaman</h2>
-
-    <div class="note">
-      ✔ <strong>Kontrapositif</strong> membawa maksud yang sama dengan ayat asal.<br>
-      ✖ <strong>Akas</strong> dan <strong>songsangan</strong> tidak semestinya sama.
+  <div class="w-full max-w-lg">
+    <!-- Header Nav -->
+    <div class="flex justify-between items-center mb-4 px-2">
+      <button id="backBtn" onclick="prevScreen()" class="text-gray-400 hover:text-white flex items-center gap-1 invisible transition-colors">
+        <i class="fas fa-arrow-left"></i>
+        <span class="text-xs font-bold">KEMBALI</span>
+      </button>
+      <div id="scoreBadge" class="bg-blue-900/50 border border-blue-500/30 text-blue-400 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
+        Mata: <span id="currentScore">0</span>
+      </div>
     </div>
 
-    <button onclick="nextScreen()">Teruskan</button>
-  </section>
+    <!-- Progress Bar -->
+    <div id="progressContainer" class="mb-6 bg-gray-800 rounded-full h-1.5 overflow-hidden hidden">
+      <div id="progressBar" class="transition-all duration-700 bg-blue-500 h-full" style="width: 0%"></div>
+    </div>
 
-  <!-- SKRIN 5 : T (REFLEKSI) -->
-  <section class="screen" id="screen5">
-    <h2>Refleksi</h2>
-    <p>Apa yang mengejutkan anda tentang hubungan ayat-ayat ini?</p>
+    <div id="app" class="card p-8">
+      
+      <!-- SKRIN 0 : MISI & OBJEKTIF -->
+      <section class="screen active" id="screen0">
+        <div class="text-center mb-6">
+          <div class="w-20 h-20 bg-blue-600/20 border-2 border-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <i class="fas fa-brain text-3xl text-blue-400"></i>
+          </div>
+          <h1 class="text-2xl font-black tracking-tight text-white mb-2 uppercase">Misi Penaakulan Logik</h1>
+          <p class="text-blue-200 text-sm font-semibold uppercase tracking-widest">Evolusi Digital: KV-2026</p>
+        </div>
 
-    <textarea placeholder="Tulis 1–2 ayat refleksi..."></textarea>
+        <div class="space-y-4 mb-8">
+          <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+            <h3 class="text-xs font-bold text-blue-400 uppercase mb-2">Protokol Objektif:</h3>
+            <ul class="text-sm space-y-2 text-gray-300">
+              <li class="flex items-start gap-2">
+                <i class="fas fa-crosshairs text-blue-500 mt-1"></i>
+                <span>Mengukuhkan kognitif tentang Implikasi & Kontrapositif.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fas fa-crosshairs text-blue-500 mt-1"></i>
+                <span>Membina integriti struktur Akas dan Songsangan.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <i class="fas fa-crosshairs text-blue-500 mt-1"></i>
+                <span>Transformasi logik dalam simulasi teknikal bengkel.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
 
-    <button onclick="nextScreen()">Teruskan</button>
-  </section>
+        <button onclick="startMission()" class="w-full py-4 btn-primary text-white rounded-2xl font-black uppercase tracking-widest shadow-xl">
+          Mulakan Misi
+        </button>
+      </section>
 
-  <!-- SKRIN 6 : U (RINGKASAN) -->
-  <section class="screen" id="screen6">
-    <h2>Ringkasan Penting</h2>
-    <ul>
-      <li>Implikasi ≡ Kontrapositif</li>
-      <li>Akas tidak semestinya benar</li>
-      <li>Songsangan tidak semestinya benar</li>
-    </ul>
+      <!-- SKRIN 1 : SITUASI -->
+      <section class="screen" id="screen1">
+        <h2 class="text-lg font-bold mb-4 text-blue-400 flex items-center gap-2">
+          <i class="fas fa-database text-sm"></i> ANALISIS DATA
+        </h2>
+        <p class="text-gray-300 mb-6 text-sm leading-relaxed">
+          Tentukan nilai kebenaran bagi implikasi teknikal ini:
+          <span class="block mt-3 p-4 bg-gray-900 border-l-4 border-blue-500 font-mono text-sm text-blue-300 italic rounded-r-lg">
+            "Jika mesin tidak diservis, maka mesin mudah rosak."
+          </span>
+        </p>
+        <div class="grid grid-cols-1 gap-3">
+          <button onclick="processAnswer(true, 10, 'Ya, Benar')" class="w-full py-3 bg-white/5 hover:bg-blue-600 text-white border border-white/10 rounded-xl transition font-bold uppercase text-xs text-left px-4">A. Ya, Benar</button>
+          <button onclick="processAnswer(false, 0, 'Ya, Benar (Kerana ia adalah fakta teknikal)')" class="w-full py-3 bg-white/5 hover:bg-red-600 text-white border border-white/10 rounded-xl transition font-bold uppercase text-xs text-left px-4">B. Palsu</button>
+        </div>
+      </section>
 
-    <button onclick="nextScreen()">Tugasan Akhir</button>
-  </section>
+      <!-- SKRIN 2 : ANALISIS AKAS -->
+      <section class="screen" id="screen2">
+        <h2 class="text-lg font-bold mb-4 text-purple-400 flex items-center gap-2">
+          <i class="fas fa-sync text-sm"></i> PENSTRUKTURAN AKAS
+        </h2>
+        <div class="p-4 bg-purple-900/30 border border-purple-500/30 rounded-xl mb-6 text-sm text-purple-200">
+          "Jika mesin mudah rosak, maka mesin tidak diservis."
+        </div>
+        <p class="text-gray-300 mb-6 text-sm text-center font-semibold">Adakah maksudnya sama dengan ayat asal?</p>
+        <div class="grid grid-cols-2 gap-4">
+          <button onclick="processAnswer(false, 0, 'Berbeza')" class="py-3 bg-white/5 text-white border border-white/10 rounded-xl font-bold uppercase text-xs">Sama</button>
+          <button onclick="processAnswer(true, 10, 'Berbeza')" class="py-3 bg-purple-600 text-white rounded-xl font-bold uppercase text-xs shadow-lg">Berbeza</button>
+        </div>
+      </section>
 
-  <!-- SKRIN 7 : H (TUGASAN) -->
-  <section class="screen" id="screen7">
-    <h2>Tugasan Akhir</h2>
-    <p>Bina satu ayat implikasi daripada kehidupan harian anda.</p>
+      <!-- SKRIN 3 : SEMAKAN AUTOMATIK -->
+      <section class="screen" id="screen3">
+        <h2 class="text-lg font-bold mb-4 text-green-400">PENGGODAM LOGIK</h2>
+        <p class="text-[10px] text-gray-400 mb-4 italic">Lengkapkan struktur logik di bawah:</p>
+        <div class="space-y-5">
+          <div class="bg-gray-900/50 p-3 rounded-lg border border-white/5">
+            <label class="block text-[10px] font-black text-gray-500 uppercase mb-2">MOD AKAS (Q &rarr; P)</label>
+            <div class="flex gap-2 items-center bg-black/40 p-2 rounded border border-white/10 text-[11px]">
+               <span class="text-blue-500 font-bold">Jika</span>
+               <input type="text" id="inputAkas" class="flex-1 bg-transparent outline-none text-white" placeholder="mesin mudah rosak, maka mesin tidak diservis">
+            </div>
+          </div>
+          <div class="bg-gray-900/50 p-3 rounded-lg border border-white/5">
+            <label class="block text-[10px] font-black text-gray-500 uppercase mb-2">MOD SONGSANGAN (~P &rarr; ~Q)</label>
+            <div class="flex gap-2 items-center bg-black/40 p-2 rounded border border-white/10 text-[11px]">
+               <span class="text-blue-500 font-bold">Jika</span>
+               <input type="text" id="inputSongsangan" class="flex-1 bg-transparent outline-none text-white" placeholder="mesin diservis, maka mesin tidak mudah rosak">
+            </div>
+          </div>
+          <button onclick="autoCheckLogic()" class="w-full py-4 bg-green-600 text-white rounded-xl font-black uppercase text-xs tracking-widest shadow-lg">
+            Sahkan Kod Logik
+          </button>
+        </div>
+      </section>
 
-    <textarea placeholder="Jika ..., maka ..."></textarea>
+      <!-- SKRIN 4 : KONTRA -->
+      <section class="screen" id="screen4">
+        <h2 class="text-lg font-bold mb-6 text-indigo-400 uppercase tracking-tighter text-center">Analisis Kontrapositif</h2>
+        <div class="bg-indigo-600 p-6 rounded-2xl mb-6 shadow-2xl relative overflow-hidden text-center">
+            <i class="fas fa-shield-alt absolute -right-4 -bottom-4 text-8xl opacity-10"></i>
+            <p class="text-[10px] font-black uppercase mb-1 tracking-widest text-indigo-200">Prinsip Kesetaraan:</p>
+            <p class="text-xl font-black text-white italic">Implikasi &equiv; Kontrapositif</p>
+            <p class="text-[10px] text-indigo-100 mt-2">Mempunyai kebenaran yang sama.</p>
+        </div>
+        <button onclick="nextScreen()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl font-bold uppercase text-xs tracking-widest">Seterusnya</button>
+      </section>
 
-    <button onclick="saveNote()">Simpan Nota Pembelajaran</button>
-  </section>
+      <!-- SKRIN 5 : RINGKASAN -->
+      <section class="screen" id="screen5">
+        <div id="finalVisual" class="text-center mb-6">
+          <i id="finalIcon" class="fas fa-medal text-5xl mb-4"></i>
+          <h2 id="finalTitle" class="text-2xl font-black uppercase">Misi Selesai</h2>
+          <p id="finalMsg" class="text-sm text-gray-400 mt-2 px-4"></p>
+        </div>
+        
+        <div class="bg-black/40 p-4 rounded-xl border border-white/10 mb-6">
+            <div class="flex justify-between text-xs font-bold mb-2">
+                <span class="text-gray-500 uppercase tracking-widest">Markah Prestasi:</span>
+                <span id="finalScoreDisplay" class="text-blue-400">0/100</span>
+            </div>
+            <div class="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
+                <div id="finalScoreBar" class="bg-blue-500 h-full transition-all duration-1000" style="width: 0%"></div>
+            </div>
+        </div>
 
-</div>
+        <button onclick="location.reload()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs">
+          Mulakan Semula
+        </button>
+      </section>
 
-<!-- ===== APP.JS (EMBEDDED) ===== -->
-<script>
-  let current = 1;
+    </div>
 
-  function nextScreen() {
-    document.getElementById("screen" + current).classList.remove("active");
-    current++;
-    document.getElementById("screen" + current).classList.add("active");
-  }
+    <!-- Info Footer -->
+    <div class="mt-8 text-center opacity-30">
+      <p class="text-[9px] font-black tracking-widest uppercase">Digital Intelligence System &copy; KV 2026</p>
+    </div>
+  </div>
 
-  function saveNote() {
-    alert("Nota pembelajaran anda telah disimpan. Tahniah!");
-  }
-</script>
+  <script>
+    let current = 0;
+    const totalScreens = 5;
+    let score = 0;
+    let mistakes = 0;
 
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playBeep(frequency, duration) {
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.type = 'square';
+      oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + duration);
+    }
+
+    /**
+     * Fungsi Suara AI Berasaskan Bahasa Melayu
+     */
+    function speak(text) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ms-MY';
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      
+      // Filter untuk mencari suara Bahasa Melayu yang tersedia di browser/peranti
+      const voices = window.speechSynthesis.getVoices();
+      const msVoice = voices.find(v => v.lang.startsWith('ms') || v.lang.startsWith('id'));
+      if (msVoice) utterance.voice = msVoice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Memuatkan suara awal-awal untuk memastikan getVoices() tersedia (Chrome bug fix)
+    window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+
+    function startMission() {
+        playBeep(600, 0.1);
+        document.getElementById('progressContainer').classList.remove('hidden');
+        nextScreen();
+    }
+
+    function processAnswer(isCorrect, points, correctAnswer) {
+      const overlay = document.getElementById('feedbackOverlay');
+      const icon = document.getElementById('feedbackIcon');
+      const title = document.getElementById('feedbackTitle');
+      const text = document.getElementById('feedbackText');
+      const ansBox = document.getElementById('correctAnswerBox');
+
+      overlay.style.display = 'flex';
+
+      if (isCorrect) {
+        score += points;
+        playBeep(880, 0.1);
+        speak("Tahniah."); // Maklum balas suara betul
+        icon.innerHTML = '<i class="fas fa-check-circle text-green-500 animate-bounce"></i>';
+        title.innerText = "TEPAT!";
+        title.className = "text-2xl font-black mb-2 uppercase text-green-500";
+        text.innerText = "Data logik disahkan.";
+        ansBox.classList.add('hidden');
+      } else {
+        mistakes++;
+        playBeep(150, 0.3);
+        speak("Its okay, cuba lagi."); // Maklum balas suara salah
+        icon.innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
+        title.innerText = "KURANG TEPAT";
+        title.className = "text-2xl font-black mb-2 uppercase text-red-500";
+        text.innerText = "Ralat dikesan dalam analisis.";
+        ansBox.innerHTML = `<div class="font-bold text-white mb-1 uppercase tracking-tighter">Jawapan Betul:</div>${correctAnswer}`;
+        ansBox.classList.remove('hidden');
+      }
+
+      updateScoreUI();
+
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        nextScreen();
+      }, 2500);
+    }
+
+    function updateScoreUI() {
+        document.getElementById('currentScore').innerText = score;
+    }
+
+    function autoCheckLogic() {
+      const akas = document.getElementById('inputAkas').value.toLowerCase();
+      const songsangan = document.getElementById('inputSongsangan').value.toLowerCase();
+
+      // Logik semakan kata kunci
+      const akasOK = akas.includes("mesin mudah rosak") && akas.includes("tidak diservis");
+      const songOK = songsangan.includes("mesin diservis") && songsangan.includes("tidak mudah rosak");
+
+      if (akasOK && songOK) {
+        processAnswer(true, 30, "");
+      } else {
+        processAnswer(false, 0, "Akas: Jika mesin mudah rosak, maka mesin tidak diservis. <br>Songsangan: Jika mesin diservis, maka mesin tidak mudah rosak.");
+      }
+    }
+
+    function nextScreen() {
+      document.getElementById("screen" + current).classList.remove("active");
+      current++;
+      if(current < totalScreens) {
+          document.getElementById("screen" + current).classList.add("active");
+          updateUI();
+      } else {
+          showFinalResults();
+      }
+    }
+
+    function prevScreen() {
+      if (current > 1) {
+        document.getElementById("screen" + current).classList.remove("active");
+        current--;
+        updateUI();
+        document.getElementById("screen" + current).classList.add("active");
+      }
+    }
+
+    function updateUI() {
+      const progress = (current / (totalScreens - 1)) * 100;
+      document.getElementById("progressBar").style.width = progress + "%";
+      
+      const backBtn = document.getElementById("backBtn");
+      if (current > 1 && current < totalScreens) backBtn.classList.remove("invisible");
+      else backBtn.classList.add("invisible");
+    }
+
+    function showFinalResults() {
+        document.getElementById("screen5").classList.add("active");
+        const finalTitle = document.getElementById('finalTitle');
+        const finalMsg = document.getElementById('finalMsg');
+        const finalIcon = document.getElementById('finalIcon');
+        const totalScore = Math.min(score + 50, 100);
+
+        document.getElementById('finalScoreDisplay').innerText = totalScore + "/100";
+        setTimeout(() => {
+            document.getElementById('finalScoreBar').style.width = totalScore + "%";
+        }, 500);
+
+        if (totalScore >= 80) {
+            finalTitle.innerText = "MISI CEMERLANG";
+            finalTitle.className = "text-2xl font-black uppercase text-yellow-400";
+            finalMsg.innerText = "Anda telah membuktikan ketajaman akal dalam penaakulan logik KV.";
+            finalIcon.className = "fas fa-trophy text-6xl text-yellow-400 mb-4 animate-pulse";
+            speak("Tahniah. Anda pelajar cemerlang.");
+        } else {
+            finalTitle.innerText = "MISI SELESAI";
+            finalTitle.className = "text-2xl font-black uppercase text-blue-400";
+            finalMsg.innerText = "Simulasi selesai. Mari kita cuba lagi untuk skor 100%!";
+            finalIcon.className = "fas fa-check-double text-6xl text-blue-400 mb-4";
+            speak("Its okay, cuba lagi di masa hadapan.");
+        }
+    }
+  </script>
 </body>
 </html>
-
