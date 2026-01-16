@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logik Matematik KV</title>
+
+  <!-- ===== STYLE.CSS (EMBEDDED) ===== -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+
+    #app {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #1f2933;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #6b7280;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      font-size: 15px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .note {
+      background: #e0f2fe;
+      padding: 12px;
+      border-left: 4px solid #0284c7;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="app">
+
+  <!-- SKRIN 1 : S (SITUASI) -->
+  <section class="screen active" id="screen1">
+    <h1>Situasi Bengkel</h1>
+    <p><strong>Jika mesin tidak diservis, maka mesin mudah rosak.</strong></p>
+    <p>Adakah ayat ini sentiasa benar?</p>
+
+    <button onclick="nextScreen()">Ya</button>
+    <button onclick="nextScreen()">Tidak</button>
+    <button onclick="nextScreen()">Tak pasti</button>
+  </section>
+
+  <!-- SKRIN 2 : KONFLIK PEMIKIRAN -->
+  <section class="screen" id="screen2">
+    <h2>Cuba Fikir</h2>
+    <p><strong>Jika mesin mudah rosak, maka mesin tidak diservis.</strong></p>
+    <p>Adakah maksudnya sama dengan ayat asal?</p>
+
+    <button onclick="nextScreen()">Sama</button>
+    <button onclick="nextScreen()">Tidak sama</button>
+  </section>
+
+  <!-- SKRIN 3 : E (BINA AYAT) -->
+  <section class="screen" id="screen3">
+    <h2>Bina Ayat Logik</h2>
+    <p>Daripada ayat asal, bina ayat berikut:</p>
+
+    <label>Akas</label>
+    <input type="text" placeholder="Jika ..., maka ...">
+
+    <label>Songsangan</label>
+    <input type="text" placeholder="Jika bukan ..., maka bukan ...">
+
+    <label>Kontrapositif</label>
+    <input type="text" placeholder="Jika bukan ..., maka bukan ...">
+
+    <button onclick="nextScreen()">Semak</button>
+  </section>
+
+  <!-- SKRIN 4 : N (SEMAKAN) -->
+  <section class="screen" id="screen4">
+    <h2>Semakan Kefahaman</h2>
+
+    <div class="note">
+      ✔ <strong>Kontrapositif</strong> membawa maksud yang sama dengan ayat asal.<br>
+      ✖ <strong>Akas</strong> dan <strong>songsangan</strong> tidak semestinya sama.
+    </div>
+
+    <button onclick="nextScreen()">Teruskan</button>
+  </section>
+
+  <!-- SKRIN 5 : T (REFLEKSI) -->
+  <section class="screen" id="screen5">
+    <h2>Refleksi</h2>
+    <p>Apa yang mengejutkan anda tentang hubungan ayat-ayat ini?</p>
+
+    <textarea placeholder="Tulis 1–2 ayat refleksi..."></textarea>
+
+    <button onclick="nextScreen()">Teruskan</button>
+  </section>
+
+  <!-- SKRIN 6 : U (RINGKASAN) -->
+  <section class="screen" id="screen6">
+    <h2>Ringkasan Penting</h2>
+    <ul>
+      <li>Implikasi ≡ Kontrapositif</li>
+      <li>Akas tidak semestinya benar</li>
+      <li>Songsangan tidak semestinya benar</li>
+    </ul>
+
+    <button onclick="nextScreen()">Tugasan Akhir</button>
+  </section>
+
+  <!-- SKRIN 7 : H (TUGASAN) -->
+  <section class="screen" id="screen7">
+    <h2>Tugasan Akhir</h2>
+    <p>Bina satu ayat implikasi daripada kehidupan harian anda.</p>
+
+    <textarea placeholder="Jika ..., maka ..."></textarea>
+
+    <button onclick="saveNote()">Simpan Nota Pembelajaran</button>
+  </section>
+
+</div>
+
+<!-- ===== APP.JS (EMBEDDED) ===== -->
+<script>
+  let current = 1;
+
+  function nextScreen() {
+    document.getElementById("screen" + current).classList.remove("active");
+    current++;
+    document.getElementById("screen" + current).classList.add("active");
+  }
+
+  function saveNote() {
+    alert("Nota pembelajaran anda telah disimpan. Tahniah!");
+  }
+</script>
+
+</body>
+</html>
+
